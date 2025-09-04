@@ -1,3 +1,29 @@
 pipeline{
 agent any
-stages
+stages{
+stage('checkout'){
+steps{
+git branch: 'main', url: 'https://github.com/Mounika-Bakaram/devops/new/main'
+}
+}
+stage('deploy'){
+steps{
+sh '''
+mkdir -p deployed_html
+cp *.html deployed_html/
+'''
+}
+}
+}
+post{
+success{
+publishHTML(target: [
+allowMissing: false,
+keepAll: true,
+reporDir: 'deplyed_html',
+reportFiles: 'form.html',
+reportName: 'My Webpage'
+])
+}
+}
+}
